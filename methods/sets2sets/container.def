@@ -1,0 +1,23 @@
+Bootstrap: docker
+From: ubuntu:24.04
+
+
+%post
+    apt-get update
+    apt-get install -y python3.12 python3.12-venv python3-pip git
+    python3.12 -m venv /opt/venv
+    . /opt/venv/bin/activate
+    pip install --upgrade pip
+
+    git clone https://github.com/pierre-lubitzsch/towards-unlearning-in-recsys.git /opt/towards-unlearning-in-recsys
+
+    pip install --pre -r /opt/towards-unlearning-in-recsys/requirements.txt
+    cd /opt/towards-unlearning-in-recsys/methods/sets2sets/
+    mkdir models
+
+%runscript
+    #!/bin/bash
+    . /opt/venv/bin/activate
+
+    cd /opt/towards-unlearning-in-recsys/methods/sets2sets/
+    exec "$@"
